@@ -1,0 +1,18 @@
+{
+  "name": "nodejs_daraja",
+  "version": "1.0.0",
+  "description": "Integrating Mpesa Daraja Api using Nodejs",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon index.js"
+  },
+  "author": "3litepwn",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.1",
+    "moment": "^2.30.1",
+    "nodemon": "^3.1.7"
+  }
+}
