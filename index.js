@@ -66,37 +66,33 @@ app.get("/stk_push",(req,res)=>{
         const businessShortCode=process.env.BUSINESS_SHORT_CODE;
         const mpesaPassKey=process.env.MPESA_PASS_KEY;
         const url="https://sandbox.safaricom.co.ke/mpesa/stkpush/v1/processrequest";
-        const amount=100;
+        const amount=1;
         const phone =process.env.PHONE_NUMBER
 
         //generate base 64 encoded password from the businesscode, passkey and timestamp
         const password=new Buffer.from(businessShortCode+mpesaPassKey+timestamp).toString("base64");
-        console.log(password);
+        console.log(`base 64 encoded password ${password}`);
         const binaryData=new Buffer.from(password,"base64").toString();
-        console.log(binaryData);
-    
-    axios.post(url,{
-        BusinessShortCode:businessShortCode,
-        Password:password,
-        Timestamp:timestamp,
-        TransactionType:"CustomerPayBillOnline",
-        Amount:amount,
-        PartyA:phone,
-        PartB:businessShortCode,
-        callBackUrl:"",
-        AccountReference:"Superior Online MerChants",
-        TransactionDesc:`Pay Superior Merchants ${amount}`
-    },
-    {
-        headers:{
-            Authorization:auth,
+        console.log(` decoded binary data from the password ${binaryData}`);
+
+        const payload={
+            BusinessShortCode:businessShortCode,
+            Password:password,
+            Timestamp:timestamp,
+            TransactionType:"CustomerPayBillOnline",
+            Amount:amount,
+            PartyA:phone,
+            PartyB:businessShortCode,
+            PhoneNumber:phone,
+            CallBackURL:"https://dd3d-105-160-22-207.ngrok-free.app/callback",
+            AccountReference:"Superior Online MerChants",
+            TransactionDesc:`Pay Superior Merchants ${amount}`
         }
-    }
-)
+    
+    axios.post(url,payload,{headers:{Authorization:auth}})
 })
-.then(response=>{
+.then((response)=>{
     res.send("Request has been successfully sent you will be prompted to enter your password")
-    console.log(response.data)
 })
 .catch(err=>{
     console.log(err.message);
